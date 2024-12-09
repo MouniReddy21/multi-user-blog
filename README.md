@@ -1,7 +1,7 @@
 # Multi-User Blogging Platform
 
 ## Project Overview
-Our project is a multi-user blogging platform where users can register, log in, create, edit, delete posts, and add comments. It offers a simple, user-friendly interface with secure authentication, better user control, and content discoverability, enhancing community engagement and accessibility.The **Multi-User Blog** is a blogging platform that allows multiple users to register, log in, create, edit, delete posts, and add comments. The platform includes secure user authentication, user profiles, and enhanced content discoverability to promote community engagement. Users can upload images, view posts, and interact with content through comments, all while maintaining an easy-to-use interface.
+The **Multi-User Blog** is a blogging platform that allows multiple users to register, log in, create, edit, delete posts, and add comments. The platform includes secure user authentication, user profiles, and enhanced content discoverability to promote community engagement. Users can upload images, view posts, and interact with content through comments, all while maintaining an easy-to-use interface.
 
 Key Features:
 - **User Authentication**: Secure registration, login, and logout functionality.
@@ -12,31 +12,33 @@ Key Features:
 
 
 ## File Structure
-multi-user-blog/
-    app/
-        static/
-            css/                    -> layout.css, view_post.css
-            images/                  -> Images uploaded by users
-            js/                      -> script.js
-            uploads/                 -> Directory for storing uploaded images
-        templates/
-            create_post.html         -> Template for creating/editing posts
-            index.html               -> Template for the homepage (view posts)
-            layout.html              -> Base layout file
-            login.html               -> Template for login page
-            register.html            -> Template for registration page
-            user_profile.html        -> Template for displaying user profiles
-            view_post.html           -> Template for displaying a single post
-        __init__.py                  -> Initialize the Flask app and configure routes
-        database.py                 -> Defines the database connection and schema
-        forms.py                    -> Contains Flask-WTF forms for user inputs
-        models.py                   -> Database models for users, posts, and comments
-        routes.py                   -> Defines the routes and view functions
-    app.db                         -> SQLite database file
-    .gitignore.txt                 -> Git ignore file to exclude unnecessary files
-    README.md                      -> Project description and instructions
-    requirements.txt               -> List of dependencies
-    run.py                         -> Entry point to start the Flask application
+### `multi-user-blog/`
+#### `app/`
+##### `static/`
+- **`css/`**:  `layout.css` and `view_post.css`
+- **`images/`**
+- **`js/`**: `script.js`
+- **`uploads/`**
+
+##### `templates/`
+- **`create_post.html`**: Template for creating or editing blog posts.
+- **`index.html`**: The homepage template, which displays a list of blog posts.
+- **`layout.html`**: The base layout template, which includes common HTML elements like headers, footers, and navigation.
+- **`login.html`**: Template for the login page.
+- **`register.html`**: Template for the registration page.
+- **`user_profile.html`**: Template for displaying a user's profile, including their posts.
+- **`view_post.html`**: Template for viewing a single blog post and its associated comments.
+
+##### `__init__.py`
+##### `database.py`
+##### `forms.py`
+##### `models.py`
+##### `routes.py`
+#### `app.db`
+#### `.gitignore.txt`
+#### `README.md`
+#### `requirements.txt`
+#### `run.py`
 
 ## Steps to Set Up and Run the Code
 
