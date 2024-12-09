@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block title %}Login{% endblock %}
+{% block head %}
+{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card shadow-sm p-4" style="max-width: 400px; width: 100%; border-radius: 8px;">
+        <h1 class="heading_title text-center mb-4">Login</h1>
+        <form method="post">
+            {{ form.hidden_tag() }}
+
+            <div class="mb-3">
+                {{ form.username.label(class="form-label") }}
+                {{ form.username(class="form-control") }}
+                {% for error in form.username.errors %}
+                <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="mb-3">
+                {{ form.password.label(class="form-label") }}
+                {{ form.password(class="form-control") }}
+                {% for error in form.password.errors %}
+                <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-dark btn-lg">{{ form.submit.label }}</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+{% block title %}Register{% endblock %}
+{% block head %}
+{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card shadow-sm p-4" style="max-width: 400px; width: 100%; border-radius: 8px;">
+        <h1 class="heading_title text-center mb-4">Register</h1>
+        <form method="post">
+            {{ form.hidden_tag() }}
+
+            <!-- Username Field -->
+            <div class="mb-3">
+                {{ form.username.label(class="form-label") }}
+                {{ form.username(class="form-control") }}
+                {% for error in form.username.errors %}
+                <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <!-- Email Field -->
+            <div class="mb-3">
+                {{ form.email.label(class="form-label") }}
+                {{ form.email(class="form-control") }}
+                {% for error in form.email.errors %}
+                <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <!-- Password Field -->
+            <div class="mb-3">
+                {{ form.password.label(class="form-label") }}
+                {{ form.password(class="form-control") }}
+                {% for error in form.password.errors %}
+                <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <!-- Confirm Password Field -->
+            <div class="mb-3">
+                {{ form.confirm_password.label(class="form-label") }}
+                {{ form.confirm_password(class="form-control") }}
+                {% for error in form.confirm_password.errors %}
+                <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <!-- Submit Button -->
+            <div class="d-grid">
+                <button type="submit" class="btn btn-dark btn-lg">{{ form.submit.label }}</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

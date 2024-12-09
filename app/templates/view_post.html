@@ -1,0 +1,136 @@
+{% extends "layout.html" %}
+
+{% block title %}
+{{ post.title }} | Blogging Platform
+{% endblock %}
+
+{% block head %}
+<!-- Include any additional styles for the post view -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/view_post.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg rounded-lg p-4">
+        <!-- Post Title -->
+        <h1 class="post-title text-center text-primary mb-4">{{ post.title }}</h1>
+
+        <!-- Post Meta Information (Author, Category, Date) -->
+        <div class="post-meta text-center text-muted mb-4">
+            <p>By <strong>{{ post.author.username }}</strong></p>
+            <p>Category: <strong>
+                    {% if post.category %}
+                    {{ post.category.name }}
+                    {% else %}
+                    No category
+                    {% endif %}
+                </strong></p>
+            <p>Published on {{ post.created_at.strftime('%B %d, %Y at %I:%M %p') }}</p>
+        </div>
+
+        <!-- Post Image with Default Fallback -->
+        <div class="post-image mb-4">
+            <img src="{% if post.image %}{{ url_for('static', filename='uploads/' + post.image) }}{% else %}{{ url_for('static', filename='images/hero-bg.jpg') }}{% endif %}"
+                alt="{{ post.title }}" class="img-fluid rounded shadow-sm">
+        </div>
+
+        <!-- Post Content -->
+        <div class="post-content mb-4">
+            <p>{{ post_content_html|safe }}</p>
+        </div>
+
+        <!-- Post Tags -->
+        {% if tags %}
+        <div class="post-tags mb-4">
+            <strong>Tags:</strong>
+            {% for tag in tags %}
+            <span class="badge bg-primary">{{ tag }}</span>{% if not loop.last %}, {% endif %}
+            {% endfor %}
+        </div>
+        {% else %}
+        <p>No tags associated with this post.</p>
+        {% endif %}
+
+        <!-- Comments Section -->
+        <div class="post-comments mb-4">
+            <h3>Comments</h3>
+            {% for comment in post.comments %}
+            <div class="comment mb-3 p-3 border rounded">
+                <p><strong>{{ comment.author.username }}</strong> on {{ comment.created_at.strftime('%B %d, %Y at %I:%M
+                    %p') }}</p>
+                <p>{{ comment.content }}</p>
+            </div>
+            {% endfor %}
+
+            {% if current_user.is_authenticated %}
+            <form method="POST" action="{{ url_for('routes.add_comment', post_id=post.id) }}">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.content(class="form-control", placeholder="Add a comment...") }}
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-sm">Post comment</button>
+                </div>
+            </form>
+            {% else %}
+            <p>Please <a href="{{ url_for('routes.login') }}">log in</a> to leave a comment.</p>
+            {% endif %}
+        </div>
+
+        <!-- Ratings Section -->
+        <div class="post-ratings mb-4">
+            <h3>Rate this Post</h3>
+            <p>Average Rating: <strong>{{ average_rating }}</strong></p>
+
+            {% if current_user.is_authenticated %}
+            {% if user_rating %}
+            <p>Your Rating: <strong>{{ user_rating }}</strong></p>
+            {% else %}
+            <p>You have not rated this post yet.</p>
+            {% endif %}
+            {% else %}
+            <p>Please <a href="{{ url_for('routes.login') }}">log in</a> to rate this post.</p>
+            {% endif %}
+
+            {% if current_user.is_authenticated %}
+            <form method="POST" action="{{ url_for('routes.rate_post', post_id=post.id) }}">
+                {{ form.hidden_tag() }}
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="rating" id="rating1" value="1" checked>
+                    <label class="form-check-label" for="rating1">1</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="rating" id="rating2" value="2">
+                    <label class="form-check-label" for="rating2">2</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="rating" id="rating3" value="3">
+                    <label class="form-check-label" for="rating3">3</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="rating" id="rating4" value="4">
+                    <label class="form-check-label" for="rating4">4</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="rating" id="rating5" value="5">
+                    <label class="form-check-label" for="rating5">5</label>
+                </div>
+
+                <button type="submit" class="btn btn-primary mt-3">Submit Rating</button>
+            </form>
+            {% endif %}
+        </div>
+
+        <!-- Post Actions (Edit/Delete buttons for author) -->
+        <div class="post-actions">
+            {% if current_user.is_authenticated and current_user.id == post.author.id %}
+            <a href="{{ url_for('routes.edit_post', post_id=post.id) }}" class="btn btn-primary">Edit</a>
+            <form method="POST" action="{{ url_for('routes.delete_post', post_id=post.id) }}" style="display: inline;">
+                {{ form.hidden_tag() }}
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

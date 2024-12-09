@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+
+{% block title %}Edit Post{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="heading_title">Edit Post</h1>
+    <form method="POST" action="{{ url_for('routes.edit_post', post_id=post.id) }}" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+
+        <div class="form-group">
+            <label for="title">Title</label>
+            {{ form.title(class="form-control", id="title") }}
+        </div>
+
+        <div class="form-group">
+            <label for="content">Content</label>
+            {{ form.content(class="form-control", id="content") }}
+        </div>
+
+        <div class="form-group">
+            <label for="tags">Tags</label>
+            {{ form.tags(class="form-control", id="tags") }}
+        </div>
+
+        <div class="form-group">
+            <label for="category">Category</label>
+            {{ form.category(class="form-control", id="category") }}
+        </div>
+
+        <div class="form-group">
+            <label for="new_category">New Category</label>
+            {{ form.new_category(class="form-control", id="new_category") }}
+        </div>
+
+        <div class="form-group">
+            <label for="image">Post Image</label>
+            {{ form.image(class="form-control", id="image") }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update Post</button>
+    </form>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const categoryField = document.getElementById("category");
+            const newCategoryGroup = document.getElementById("new-category-group");
+
+            categoryField.addEventListener("change", function () {
+                if (categoryField.value === "new_category") {
+                    newCategoryGroup.style.display = "block";
+                } else {
+                    newCategoryGroup.style.display = "none";
+                }
+            });
+        });
+    </script>
+</div>
+{% endblock %}

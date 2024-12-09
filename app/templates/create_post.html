@@ -1,0 +1,124 @@
+{% extends "layout.html" %}
+{% block title %}
+Create a New Post | Blogging Platform
+{% endblock %}
+
+{% block head %}
+<!-- Add SimpleMDE CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplemde@1.11.2/dist/simplemde.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-sm p-4 rounded-lg">
+        <h2 class="heading_title text-center mb-4">{{ 'Edit Post' if edit else 'Create a New Post' }}</h2>
+
+        <!-- Display form validation errors -->
+        {% if form.errors %}
+        <div class="alert alert-danger">
+            <ul>
+                {% for field, errors in form.errors.items() %}
+                <li>{{ field.label }}:
+                    <ul>
+                        {% for error in errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <form method="POST"
+            action="{{ url_for('routes.edit_post', post_id=post.id) if edit else url_for('routes.create_post') }}"
+            enctype="multipart/form-data">
+            {{ form.hidden_tag() }} <!-- For CSRF protection -->
+
+            <!-- Title Input -->
+            <div class="form-group mb-3">
+                <label for="title" class="form-label">Title</label>
+                {{ form.title(class="form-control", placeholder="Enter the title of your post") }}
+            </div>
+
+            <!-- Content Input with Markdown Editor -->
+            <div class="form-group mb-3">
+                <label for="content" class="form-label">Content</label>
+                <!-- Rich Text Editor (Markdown Editor) -->
+                <textarea id="content" name="content" class="form-control"
+                    placeholder="Write your post content here">{{ form.content.data }}</textarea>
+            </div>
+
+            <!-- Category Input -->
+            <div class="form-group mb-3">
+                <label for="category" class="form-label">Category</label>
+                <select class="form-control" id="category" name="category">
+                    <option value="" disabled selected>Select a category</option>
+                    <option value="new_category">Add New Category</option>
+                    {% for category in categories %}
+                    <option value="{{ category.id }}">{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- New Category Input (Conditional display) -->
+            <div class="form-group mb-3" id="newCategoryDiv" {% if form.category.data=='new_category' %}
+                style="display: block;" {% else %} style="display: none;" {% endif %}>
+                <label for="new_category" class="form-label">Enter a New Category</label>
+                <input type="text" id="new_category" name="new_category" class="form-control"
+                    value="{{ form.new_category.data }}" />
+            </div>
+
+            <!-- Tags Input -->
+            <div class="form-group mb-3">
+                <label for="tags" class="form-label">Tags (comma-separated)</label>
+                {{ form.tags(class="form-control", placeholder="Add tags separated by commas", value=form.tags.data) }}
+            </div>
+
+            <!-- Image Upload Input -->
+            <div class="form-group mb-3">
+                <label for="image" class="form-label">Upload Image</label>
+                {{ form.image(class="form-control") }}
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-block btn-lg">Create Post</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Script for toggling the category input -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const categorySelect = document.getElementById("category");
+        const newCategoryDiv = document.getElementById("newCategoryDiv");
+        const newCategoryInput = document.getElementById("new_category");
+
+        categorySelect.addEventListener("change", function () {
+            if (categorySelect.value === "new_category") {
+                newCategoryDiv.style.display = "block"; // Show the new category input field
+                newCategoryInput.required = true;
+            } else {
+                newCategoryDiv.style.display = "none"; // Hide the new category input field
+                newCategoryInput.value = ""; // Clear the input if not used
+                newCategoryInput.required = false; // Make new category not required
+            }
+        });
+
+        if (categorySelect.value === "new_category") {
+            newCategoryDiv.style.display = "block";
+        }
+    });
+</script>
+
+<!-- Initialize SimpleMDE -->
+<script src="https://cdn.jsdelivr.net/npm/simplemde@1.11.2/dist/simplemde.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var simplemde = new SimpleMDE({ element: document.getElementById("content") });
+    });
+</script>
+
+{% endblock %}

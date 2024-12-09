@@ -1,0 +1,77 @@
+{% extends "layout.html" %}
+
+{% block title %}Home | Blog{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+    <!-- Header Section -->
+    <div class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary header_container"
+        style="background-color: #f8f9fa; border-radius: 15px;">
+        <div class="col-lg-6 px-0">
+            <h1 class="display-4 fst-italic text-dark mb-3">Welcome to Our Blog</h1>
+            <p class="lead my-3 fs-4">Stay updated with the latest posts from our community of writers.</p>
+        </div>
+    </div>
+
+    <!-- Search Results (if any) -->
+    {% if query %}
+    <div class="alert alert-info mb-4">
+        <h3 class="text-center">Search Results for "{{ query }}"</h3>
+    </div>
+    {% endif %}
+
+    <!-- Recent Posts Section -->
+    <section class="post-list">
+        <h2 class="pb-4 mb-4 fst-italic text-center border-bottom border-danger-subtle border-2">
+            Recent Posts
+        </h2>
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% for post in posts %}
+            <div class="col">
+                <!-- Card for each post -->
+                <div class="card h-100 shadow-lg rounded-4"
+                    style="background-image: url('{{ url_for('static', filename='uploads/' + (post.image if post.image else 'images/default-image.jpg')) }}'); background-size: cover; background-position: center;">
+                    <div class="card-body d-flex flex-column justify-content-end p-4 text-white">
+                        <h3 class="card-title fw-bold text-shadow" style="color: black;">{{ post.title }}</h3>
+                        <!-- <p class="card-text">{{ post.content[:150] }}...</p> -->
+
+                        <ul class="d-flex list-unstyled mt-3 mb-4">
+                            <li class="me-auto d-flex align-items-center">
+                                <!-- Display author's profile picture -->
+                                <img src="{{ url_for('static', filename='uploads/' + post.author.profile_picture if post.author.profile_picture else 'images/profile_pic.jpg') }}"
+                                    alt="{{ post.author.username }}" width="32" height="32"
+                                    class="rounded-circle border border-white me-2">
+                                <small class="text-white" style="color: black;">{{ post.author.username }}</small>
+                            </li>
+                            <li class="d-flex align-items-center me-3">
+                                <svg class="bi me-2" width="1em" height="1em">
+                                    <use xlink:href="#geo-fill"></use>
+                                </svg>
+                                <small class="text-white">{{ post.created_at.strftime('%B %d, %Y') }}</small>
+                            </li>
+                        </ul>
+
+                        <a href="{{ url_for('routes.post_detail', post_id=post.id) }}"
+                            class="btn btn-light mt-3 rounded-pill text-dark">Read More</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- No Posts Available Message -->
+        {% if not posts %}
+        <div class="alert alert-warning text-center">
+            <p>No posts available. <a href="{{ url_for('routes.create_post') }}" class="btn btn-primary">Create one
+                    now!</a></p>
+        </div>
+        {% endif %}
+    </section>
+
+</div>
+{% endblock %}
